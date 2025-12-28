@@ -2,111 +2,120 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Jogo de Luta</title>
+<title>Jogo de Futebol 2D</title>
+
 <style>
 body {
-  background: #111;
-  color: white;
+  margin: 0;
+  background: #0b6623;
   font-family: Arial;
+  color: white;
   text-align: center;
 }
 
-.arena {
-  margin-top: 20px;
+#placar {
+  font-size: 20px;
+  margin: 10px;
 }
 
-.lutador {
-  font-size: 80px;
-}
-
-.barra {
-  width: 80%;
-  height: 20px;
-  background: red;
-  margin: 10px auto;
-}
-
-.vida {
-  height: 100%;
-  background: lime;
+#campo {
+  position: relative;
   width: 100%;
+  height: 320px;
+  background: #1e8f3e;
+  border-top: 4px solid white;
+  border-bottom: 4px solid white;
+  overflow: hidden;
+}
+
+#jogador {
+  position: absolute;
+  bottom: 20px;
+  left: 40px;
+  width: 40px;
+  height: 60px;
+  background: blue;
+  border-radius: 5px;
+}
+
+#bola {
+  position: absolute;
+  bottom: 40px;
+  left: 120px;
+  width: 25px;
+  height: 25px;
+  background: white;
+  border-radius: 50%;
+}
+
+#gol {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 30px;
+  height: 100%;
+  background: rgba(255,255,255,0.3);
 }
 
 button {
-  padding: 15px;
-  margin: 5px;
+  margin: 6px;
+  padding: 10px;
   font-size: 18px;
 }
 </style>
 </head>
+
 <body>
 
-<h1>🥊 JOGO DE LUTA</h1>
+<h2>⚽ JOGO DE FUTEBOL 2D</h2>
+<div id="placar">Gols: <span id="gols">0</span></div>
 
-<div>
-  Jogador ❤️
-  <div class="barra"><div id="vidaJogador" class="vida"></div></div>
+<div id="campo">
+  <div id="jogador"></div>
+  <div id="bola"></div>
+  <div id="gol"></div>
 </div>
 
 <div>
-  Inimigo ❤️
-  <div class="barra"><div id="vidaInimigo" class="vida"></div></div>
-</div>
-
-<div class="arena">
-  <span class="lutador">🥷</span>
-  VS
-  <span class="lutador">🤖</span>
-</div>
-
-<div>
-  <button onclick="atacar()">👊 Atacar</button>
-  <button onclick="defender()">🛡️ Defender</button>
+  <button onclick="mover(-20)">⬅️</button>
+  <button onclick="mover(20)">➡️</button>
+  <button onclick="chutar()">💥 Chutar</button>
 </div>
 
 <script>
-let vidaJogador = 100;
-let vidaInimigo = 100;
-let defendendo = false;
+let jogador = document.getElementById("jogador");
+let bola = document.getElementById("bola");
+let gols = 0;
 
-function atacar() {
-  let dano = Math.floor(Math.random() * 20) + 5;
-  vidaInimigo -= dano;
-  if (vidaInimigo < 0) vidaInimigo = 0;
-  document.getElementById("vidaInimigo").style.width = vidaInimigo + "%";
-
-  ataqueInimigo();
-  checarVencedor();
+function mover(px) {
+  let nova = jogador.offsetLeft + px;
+  if (nova >= 0 && nova <= window.innerWidth - 40) {
+    jogador.style.left = nova + "px";
+  }
 }
 
-function defender() {
-  defendendo = true;
-  alert("Você está defendendo!");
+function chutar() {
+  let dist = Math.abs(jogador.offsetLeft - bola.offsetLeft);
+  if (dist < 50) {
+    bola.style.left = bola.offsetLeft + 120 + "px";
+    setTimeout(verificarGol, 300);
+  }
 }
 
-function ataqueInimigo() {
-  let dano = Math.floor(Math.random() * 15) + 5;
-  if (defendendo) {
-    dano = Math.floor(dano / 2);
-    defendendo = false;
+function verificarGol() {
+  if (bola.offsetLeft > window.innerWidth - 60) {
+    gols++;
+    document.getElementById("gols").innerText = gols;
+    resetar();
   }
-  vidaJogador -= dano;
-  if (vidaJogador < 0) vidaJogador = 0;
-  document.getElementById("vidaJogador").style.width = vidaJogador + "%";
 }
 
-function checarVencedor() {
-  if (vidaJogador <= 0) {
-    alert("💀 Você perdeu!");
-    location.reload();
-  }
-  if (vidaInimigo <= 0) {
-    alert("🏆 Você venceu!");
-    location.reload();
-  }
+function resetar() {
+  bola.style.left = "120px";
+  jogador.style.left = "40px";
 }
 </script>
 
 </body>
 </html>
-l
+
