@@ -1,11 +1,112 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>Meu jogo</title>
+<meta charset="UTF-8">
+<title>Jogo de Luta</title>
+<style>
+body {
+  background: #111;
+  color: white;
+  font-family: Arial;
+  text-align: center;
+}
+
+.arena {
+  margin-top: 20px;
+}
+
+.lutador {
+  font-size: 80px;
+}
+
+.barra {
+  width: 80%;
+  height: 20px;
+  background: red;
+  margin: 10px auto;
+}
+
+.vida {
+  height: 100%;
+  background: lime;
+  width: 100%;
+}
+
+button {
+  padding: 15px;
+  margin: 5px;
+  font-size: 18px;
+}
+</style>
 </head>
 <body>
-  <h1>Meu jogo funcionou 🎉</h1>
-  <p>Se você está vendo isso, o GitHub Pages está OK!</p>
+
+<h1>🥊 JOGO DE LUTA</h1>
+
+<div>
+  Jogador ❤️
+  <div class="barra"><div id="vidaJogador" class="vida"></div></div>
+</div>
+
+<div>
+  Inimigo ❤️
+  <div class="barra"><div id="vidaInimigo" class="vida"></div></div>
+</div>
+
+<div class="arena">
+  <span class="lutador">🥷</span>
+  VS
+  <span class="lutador">🤖</span>
+</div>
+
+<div>
+  <button onclick="atacar()">👊 Atacar</button>
+  <button onclick="defender()">🛡️ Defender</button>
+</div>
+
+<script>
+let vidaJogador = 100;
+let vidaInimigo = 100;
+let defendendo = false;
+
+function atacar() {
+  let dano = Math.floor(Math.random() * 20) + 5;
+  vidaInimigo -= dano;
+  if (vidaInimigo < 0) vidaInimigo = 0;
+  document.getElementById("vidaInimigo").style.width = vidaInimigo + "%";
+
+  ataqueInimigo();
+  checarVencedor();
+}
+
+function defender() {
+  defendendo = true;
+  alert("Você está defendendo!");
+}
+
+function ataqueInimigo() {
+  let dano = Math.floor(Math.random() * 15) + 5;
+  if (defendendo) {
+    dano = Math.floor(dano / 2);
+    defendendo = false;
+  }
+  vidaJogador -= dano;
+  if (vidaJogador < 0) vidaJogador = 0;
+  document.getElementById("vidaJogador").style.width = vidaJogador + "%";
+}
+
+function checarVencedor() {
+  if (vidaJogador <= 0) {
+    alert("💀 Você perdeu!");
+    location.reload();
+  }
+  if (vidaInimigo <= 0) {
+    alert("🏆 Você venceu!");
+    location.reload();
+  }
+}
+</script>
+
 </body>
 </html>
